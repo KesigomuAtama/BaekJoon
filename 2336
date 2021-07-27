@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+struct data{
+	int x, y, w, seq;
+}test[500003];
+
+inline bool cmp_x(const data a, const data b){
+	return a.x<b.x;
+}
+
+inline bool cmp_y(const data a, const data b){
+	return a.y<b.y;
+}
+
+int idx[2000003], res, S, E;
+void it_min(int s, int e, int pos){
+	if(S>e || s>E) return;
+	if(S<=s && e<=E){
+		res=min(res, idx[pos]);
+		return;
+	}
+	it_min(s, (s+e)/2, pos*2);
+	it_min((s+e)/2+1, e, pos*2+1);
+}
+
+int main(){
+	int N, i, p, st=1, grade, GSN=0;
+	scanf("%d", &N);
+	while(st<N) st*=2;
+	for(i=1; i<st+N; i++) idx[i]=9999999;
+	for(i=1; i<=N; i++){
+		scanf("%d", &grade);
+		test[grade].x=i;
+	}
+	for(i=1; i<=N; i++){
+		scanf("%d", &grade);
+		test[grade].y=i;
+	}
+	for(i=1; i<=N; i++){
+		scanf("%d", &grade);
+		test[grade].w=i;
+	}
+
+	sort(test+1, test+1+N, cmp_x);
+	for(i=1; i<=N; i++) test[i].seq=i;
+	sort(test+1, test+1+N, cmp_y);
+
+	for(i=1; i<=N; i++){
+		p=test[i].seq+st-1;
+		idx[p]=test[i].w;
+		while(p){
+			idx[p/2]=min(idx[p/2], test[i].w);
+			p/=2;
+		}
+		S=1;
+		E=test[i].seq;
+		res=9999999;
+		it_min(1, st, 1);
+		if(res==test[i].w) GSN++;
+	}
+	printf("%d", GSN);
+
+	return 0;
+}
