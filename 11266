@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<set<int> > vsi;
+int v[100003], G, r, mn[100003];
+bool res[100003];
+void dfs(int i){
+	int son=0;
+	mn[i]=G;
+	set<int>::iterator it;
+	for(it=vsi[i].begin(); it!=vsi[i].end(); it++){
+		if(v[*it]){
+			mn[i]=min(mn[i], v[*it]);
+			continue;
+		}
+		son++;
+		G++;
+		v[*it]=G;
+		dfs(*it);
+		if(r!=i&&mn[*it]>=v[i]) res[i]=true;
+		mn[i]=min(mn[i], mn[*it]);
+	}
+	if(r==i&&son>=2) res[i]=true; 
+}
+
+int main(){
+	int V, E, A, B, i, cnt=0;
+	queue<int> Q;
+	scanf("%d %d", &V, &E);
+	vsi.resize(V+1);
+	for(i=1; i<=E; i++){
+		scanf("%d %d", &A, &B);
+		vsi[A].insert(B);
+		vsi[B].insert(A);
+	}
+	for(i=1; i<=V; i++){
+		if(!v[i]){
+			v[i]=G=1;
+			r=i;
+			dfs(i);
+		}
+		if(res[i]){
+			cnt++;
+			Q.push(i);
+		}
+	}
+	printf("%d\n", cnt);
+	while(!Q.empty()){
+		printf("%d ", Q.front());
+		Q.pop();
+	}
+	return 0;
+}
