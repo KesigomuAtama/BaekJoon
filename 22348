@@ -1,0 +1,38 @@
+//KesigomuAtama
+#include <bits/stdc++.h>
+#define X 1000000007
+#define MAX 50000
+long long D[503][50003], sum[503][50003];
+int main(){
+	int T, a, b, i, j, s, e;
+	long long res;
+	sum[1][0]=D[1][0]=D[1][1]=j=1, sum[1][1]=i=2;
+	while(i*(i+1)/2<=MAX*2){
+		e=i*(i+1)/2;
+		if(e>MAX) e=MAX;
+		sum[i][0]=D[i][0]=1;
+		for(j=1; j<=e; j++){
+			D[i][j]=D[i-1][j];
+			if(i<=j) D[i][j]=(D[i][j]+D[i-1][j-i])%X;
+			sum[i][j]=(sum[i][j-1]+D[i][j])%X;
+		}
+		i++;
+	}
+	scanf("%d", &T);
+	while(T--){
+		scanf("%d %d", &a, &b);
+		if(a>b) std::swap(a, b);
+		res=0;
+		i=1;
+		while(i*(i+1)/2<=a+b){
+			s=i*(i+1)/2-b, e=a;
+			if(s<0) s=0;
+			if(e>i*(i+1)/2) e=i*(i+1)/2;
+			res=(res+sum[i][e])%X;
+			if(s>0) res=(res-sum[i][s-1]+X)%X;
+			i++;
+		}
+		printf("%lld\n", res);
+	}
+	return 0;
+}
