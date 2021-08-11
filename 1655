@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+priority_queue<int> Mpq;
+priority_queue<int, vector<int>, greater<int> > mpq;
+int main(){
+	int N, i, Z;
+	scanf("%d", &N);
+	scanf("%d", &Z);
+	printf("%d\n", Z);
+	Mpq.push(Z);
+	for(i=2; i<=N; i++){
+		scanf("%d", &Z);
+		if(i%2) Mpq.push(Z); else mpq.push(Z);
+		if(mpq.top()<Mpq.top()){
+			mpq.push(Mpq.top());
+			Mpq.push(mpq.top());
+			Mpq.pop();
+			mpq.pop();
+		}
+		printf("%d\n", Mpq.top());
+	}
+	return 0;
+}
