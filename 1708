@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+stack<int> s;
+struct data{
+	long long x, y, X, Y;
+}P[100003];
+inline bool cmp(const data &a, const data &b){
+	return a.Y*b.X<a.X*b.Y||(a.Y*b.X==a.X*b.Y&&(a.y<b.y||(a.y==b.y&&a.x<b.x)));
+}
+long long ccw(const data &a, const data &b, const data &c){
+	return a.x*b.y+b.x*c.y+c.x*a.y-a.y*b.x-b.y*c.x-c.y*a.x;
+}
+int main(){
+	int n, i, a, b;
+	scanf("%d", &n);
+	for(i=0; i<n; i++) scanf("%lld %lld", &P[i].x, &P[i].y);
+	sort(P, P+n, cmp);
+	for(i=1; i<n; i++){
+		P[i].X=P[i].x-P[0].x;
+		P[i].Y=P[i].y-P[0].y;
+	}
+	sort(P+1, P+n, cmp);
+	s.push(0);
+	s.push(1);
+	for(i=2; i<n; i++){
+		while(s.size()>=2){
+			b=s.top();
+			s.pop();
+			a=s.top();
+			if(ccw(P[a], P[b], P[i])>0){
+				s.push(b);
+				break;
+			}
+		}
+		s.push(i);
+	}
+	printf("%d", s.size());
+	return 0;
+}
