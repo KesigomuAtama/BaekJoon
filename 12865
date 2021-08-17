@@ -1,0 +1,14 @@
+#include <cstdio>
+int D[100003];
+int main(){
+	int N,K,i,j,W,V;
+	int mx=0;
+	scanf("%d%d",&N,&K);
+	while(N--){
+		scanf("%d%d",&W,&V);
+		for(i=K;i>=W;i--)if(D[i-W]||i-W==0)D[i]=D[i-W]+V>D[i]?D[i-W]+V:D[i];
+	}
+	while(K--) mx=mx>D[K+1]?mx:D[K+1];
+	printf("%d",mx);
+	return 0;
+}
