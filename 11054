@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+int D[1003][2], A[1003];
+int main(){
+	int N,i,j,ans=-999;
+	scanf("%d",&N);
+	for(i=1;i<=N;i++){
+		scanf("%d",&A[i]);
+		D[i][0]=D[i][1]=1;
+		for(j=1;j<i;j++){
+			if(A[j]<A[i]){
+				D[i][0]=max(D[i][0],D[j][0]+1);
+				D[i][1]=max(D[i][1],D[j][0]+1);
+			}
+			if(A[j]>A[i]) D[i][1]=max(D[i][1],D[j][1]+1);
+		}
+	}
+	while(N--) ans=max(ans,max(D[N+1][0],D[N+1][1]));
+	printf("%d",ans);
+	return 0;
+}
